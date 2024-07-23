@@ -38,6 +38,11 @@ public class TarefasController {
         return tarefaRepository.findById(id);
     }
 
+    @GetMapping("/{prioridade}")
+    public Optional<Tarefas> listarPorPrioridade(@PathVariable("prioridade") String prioridade){
+        return tarefaRepository.findById(prioridade);
+    }
+    
     @PostMapping("/remover/{id}")
     public Optional <Tarefas> removerTarefa(@PathVariable("id") Long id){
         return tarefaRepository.delete(id);
