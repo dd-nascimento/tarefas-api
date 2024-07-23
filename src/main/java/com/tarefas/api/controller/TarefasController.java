@@ -3,7 +3,6 @@ package com.tarefas.api.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,39 +11,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tarefas.api.model.Tarefas;
-import com.tarefas.api.repository.TarefaRepository;
-
-import lombok.extern.java.Log;
+import com.tarefas.api.repository.TerafasRepository;
 
 @RestController
 @RequestMapping("/tarefas")
 public class TarefasController {
-    
-    @Autowired
-    private TarefaRepository tarefaRepository;
+
+    private TerafasRepository tarefasRepository;
 
     @PostMapping
-    public Tarefas cadastrarTarefas(@RequestBody Tarefas tarefas){
-        return tarefaRepository.save(tarefas);
+    public Tarefas cadastrarNovaTarefa(@RequestBody Tarefas tarefas){
+        return tarefasRepository.save(tarefas);
     }
 
     @GetMapping
     public List <Tarefas> listarTarefas(){
-        return tarefaRepository.findAll();
+        return tarefasRepository.findAll();
     }
 
     @GetMapping("/{id}")
     public Optional <Tarefas> consultarTarefaPorId(@PathVariable("id") Long id){
-        return tarefaRepository.findById(id);
-    }
-
-    @GetMapping("/{prioridade}")
-    public Optional<Tarefas> listarPorPrioridade(@PathVariable("prioridade") String prioridade){
-        return tarefaRepository.findById(prioridade);
+        return tarefasRepository.findById(id);
     }
     
-    @PostMapping("/remover/{id}")
-    public Optional <Tarefas> removerTarefa(@PathVariable("id") Long id){
-        return tarefaRepository.delete(id);
-    }
 }

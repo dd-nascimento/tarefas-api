@@ -31,7 +31,7 @@ public class ProjetosController {
         return projetoRepository.findAll();
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public Optional <Projetos> consultarProjeto(@PathVariable("id") Long id){
         return projetoRepository.findById(id);
     }
