@@ -3,9 +3,12 @@ package com.tarefas.api.model;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tarefas.api.constants.StatusUsuario;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -45,8 +48,9 @@ public class Usuario {
     @Column(name = "SENHA_USUARIO", nullable = false)
     private String senha;
 
-    @Column(name = "USUARIO_ATIVO", nullable = false)
-    private boolean ativo;
+    @Column(name = "STATUS_USUARIO", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private StatusUsuario status;
 
     
 }

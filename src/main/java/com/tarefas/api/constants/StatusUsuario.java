@@ -1,6 +1,6 @@
 package com.tarefas.api.constants;
 
-public enum Usuario {
+public enum StatusUsuario {
     ATIVO,
     INATIVO
 }
