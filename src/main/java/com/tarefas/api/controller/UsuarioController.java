@@ -61,8 +61,15 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public Usuario atualizarUsuario (@PathVariable("id") Long id, @RequestBody Usuario dadosUsuario){
-        return usuarioService.atualizarUsuario(id, dadosUsuario);
+    public ResponseEntity <Usuario> atualizarUsuario (@PathVariable("id") Long id, @RequestBody Usuario dadosUsuario){
+
+        Usuario usuario = usuarioService.buscarUsuarioPeloId(id);
+
+        if (Objects.isNull(usuario)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.atualizarUsuario(id, dadosUsuario));
         
     }
 }

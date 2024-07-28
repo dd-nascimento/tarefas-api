@@ -1,8 +1,11 @@
 package com.tarefas.api.controller;
 
 import java.util.List;
-import java.util.Optional;
-
+import java.util.Objects;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,27 +14,42 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tarefas.api.model.Tarefas;
-import com.tarefas.api.repository.TerafasRepository;
+import com.tarefas.api.service.TarefaService;
 
 @RestController
 @RequestMapping("/tarefas")
 public class TarefasController {
 
-    private TerafasRepository tarefasRepository;
+    @Autowired
+    private TarefaService tarefaService;
 
     @PostMapping
-    public Tarefas cadastrarNovaTarefa(@RequestBody Tarefas tarefas){
-        return tarefasRepository.save(tarefas);
+    public ResponseEntity <Tarefas> cadastrarNovaTarefa(@RequestBody Tarefas tarefas){
+        return ResponseEntity.status(HttpStatus.CREATED).body(tarefaService.cadastrarNovaTarefa(tarefas));
     }
 
     @GetMapping
-    public List <Tarefas> listarTarefas(){
-        return tarefasRepository.findAll();
+    public ResponseEntity <List <Tarefas>> listarTarefas(){
+        return ResponseEntity.status(HttpStatus.OK).body( tarefaService.listarTarefas());
     }
 
     @GetMapping("/{id}")
-    public Optional <Tarefas> consultarTarefaPorId(@PathVariable("id") Long id){
-        return tarefasRepository.findById(id);
+    public ResponseEntity <Tarefas> consultarTarefaPorId(@PathVariable("id") Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(tarefaService.buscarTarefaPeloId(id));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity <Void> deletarTarefa (@PathVariable("id") Long id){
+        
+        Tarefas tarefas = tarefaService.buscarTarefaPeloId(id);
+
+        if (Objects.isNull(tarefas)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        tarefaService.deletarTarefa(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
     
 }
