@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tarefas.api.model.Projetos;
-import com.tarefas.api.model.Usuario;
 import com.tarefas.api.repository.ProjetoRepository;
 
 @Service
