@@ -1,39 +1,66 @@
 package com.tarefas.api.controller;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tarefas.api.model.Projetos;
 import com.tarefas.api.repository.ProjetoRepository;
+import com.tarefas.api.service.ProjetoService;
 
 @RestController
 @RequestMapping("/projetos")
 public class ProjetosController {
     
     @Autowired
-    private ProjetoRepository projetoRepository;
+    private ProjetoService projetoService;
 
     @PostMapping
-    public Projetos cadastrarProjetos(@RequestBody Projetos projetos){
-        return projetoRepository.save(projetos);
+    public ResponseEntity <Projetos> cadastrarProjetos(@RequestBody Projetos projetos){
+        return ResponseEntity.status(HttpStatus.CREATED).body(projetoService.cadastrarProjetos(projetos));
     }
 
     @GetMapping
-    public List <Projetos> listarProjetos(){
-        return projetoRepository.findAll();
+    public ResponseEntity <List <Projetos>> listarProjetos(){
+        return ResponseEntity.status(HttpStatus.OK).body(projetoService.listarProjetos());
     }
 
     @GetMapping("/{id}")
-    public Optional <Projetos> consultarProjeto(@PathVariable("id") Long id){
-        return projetoRepository.findById(id);
+    public ResponseEntity <Projetos> consultarProjeto(@PathVariable("id") Long id){
+
+        Projetos projeto = projetoService.consultaProjetoPorId(id);
+
+        if (Objects.isNull(projeto)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(projeto);
+
     }
+
+    // @PutMapping("/{id}")
+    // public ResponseEntity <Projetos> atualizarProjetos (@PathVariable("id") Long id, @RequestBody Projetos dadosProjeto){
+
+    //     Projetos projeto = projetoService.consultaProjetoPorId(id);
+
+    //     if(Objects.isNull(projeto)){
+    //         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    //     }
+
+    //     return ResponseEntity.status(HttpStatus.OK).body(projetoService.atualizarProjetos(id, dadosProjeto));
+    // }
 
 }
