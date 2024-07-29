@@ -27,8 +27,33 @@ public class ProjetoService {
     public Projetos consultaProjetoPorId(Long id){
         
         Optional <Projetos> projetoOpt = projetoRepository.findById(id);
+
+        /* isPresent verifica se o objeto está present ou não */
         if (projetoOpt.isPresent()) {
             return projetoOpt.get();
+        }
+
+        return null;
+    }
+
+    public void deletarProjeto (Long id){
+        projetoRepository.deleteById(id);
+    }
+
+    public Projetos atualizarProjeto (Long id, Projetos dadProjetos){
+
+        Optional <Projetos> projetoOpt = projetoRepository.findById(id);
+
+        if (projetoOpt.isPresent()) {
+            Projetos projetos = projetoOpt.get();
+
+            projetos.setId(id);
+            projetos.setNome(dadProjetos.getNome());
+            projetos.setDescricao(dadProjetos.getDescricao());
+            projetos.setResponsavel(dadProjetos.getResponsavel());
+            projetos.setTarefas(dadProjetos.getTarefas());
+
+            return projetoRepository.save(projetos);
         }
 
         return null;
