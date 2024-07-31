@@ -1,9 +1,11 @@
 package com.tarefas.api.model;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tarefas.api.constants.StatusUsuario;
+import com.tarefas.api.dto.UsuarioDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,6 +53,24 @@ public class Usuario {
     @Column(name = "STATUS_USUARIO", nullable = false)
     @Enumerated(EnumType.STRING)
     private StatusUsuario status;
+
+    public UsuarioDTO toDTO(){
+
+        UsuarioDTO dto =  new UsuarioDTO();
+
+        dto.setId(id);
+        dto.setNome(nome);
+        dto.setEmail(email);
+        dto.setCpf(cpf);
+
+        LocalDate dataAtual = LocalDate.now();
+        Period periodo = Period.between(dataNascimento, dataAtual);
+
+        dto.setIdade(periodo.getYears());
+        dto.setStatus(status);
+
+        return dto;
+    }
 
     
 }

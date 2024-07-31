@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tarefas.api.dto.TarefaDTO;
 import com.tarefas.api.model.Tarefas;
 import com.tarefas.api.service.TarefaService;
 
@@ -29,19 +30,19 @@ public class TarefasController {
     }
 
     @GetMapping
-    public ResponseEntity <List <Tarefas>> listarTarefas(){
+    public ResponseEntity <List <TarefaDTO>> listarTarefas(){
         return ResponseEntity.status(HttpStatus.OK).body( tarefaService.listarTarefas());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity <Tarefas> consultarTarefaPorId(@PathVariable("id") Long id){
+    public ResponseEntity <TarefaDTO> consultarTarefaPorId(@PathVariable("id") Long id){
         return ResponseEntity.status(HttpStatus.OK).body(tarefaService.buscarTarefaPeloId(id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity <Void> deletarTarefa (@PathVariable("id") Long id){
         
-        Tarefas tarefas = tarefaService.buscarTarefaPeloId(id);
+        TarefaDTO tarefas = tarefaService.buscarTarefaPeloId(id);
 
         if (Objects.isNull(tarefas)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

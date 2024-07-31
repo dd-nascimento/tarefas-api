@@ -17,4 +17,5 @@ public class UsuarioDTO {
     private String email;
     private int idade;
     private StatusUsuario status;
+    
 }

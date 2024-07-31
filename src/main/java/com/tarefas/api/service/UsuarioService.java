@@ -2,10 +2,12 @@ package com.tarefas.api.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tarefas.api.dto.UsuarioDTO;
 import com.tarefas.api.model.Usuario;
 import com.tarefas.api.repository.UsuarioRepository;
 
@@ -19,15 +21,22 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    public List<Usuario> listarUsuarios() {
-        return usuarioRepository.findAll();
+    public List<UsuarioDTO> listarUsuarios() {
+
+        List<Usuario> usuarios = usuarioRepository.findAll();
+
+
+        /* Função Lambda em JAVA */
+        return usuarios.stream()
+                .map(usuario -> usuario.toDTO())
+                .collect(Collectors.toList());
     }
 
-    public Usuario buscarUsuarioPeloId(Long id) {
+    public UsuarioDTO buscarUsuarioPeloId(Long id) {
 
         Optional <Usuario> usuarioOpt = usuarioRepository.findById(id);
         if (usuarioOpt.isPresent()) {
-            return usuarioOpt.get();
+            return usuarioOpt.get().toDTO();
         }
 
         return null;

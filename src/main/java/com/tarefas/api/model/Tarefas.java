@@ -1,11 +1,18 @@
 package com.tarefas.api.model;
 
 import java.time.LocalDate;
+import java.time.Period;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tarefas.api.constants.Prioridade;
+import com.tarefas.api.constants.StatusTarefa;
+import com.tarefas.api.dto.TarefaDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -39,8 +46,36 @@ public class Tarefas {
     private LocalDate dataDeConclusao;
 
     @Column(name = "PRIORIDADE_TAREFA", nullable = false)
-    private String prioridade;
+    @Enumerated(EnumType.STRING)
+    private Prioridade prioridade;
 
     @Column(name = "STATUS_TAREFA", nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private StatusTarefa status;
+
+    public TarefaDTO toDTO(){
+
+        TarefaDTO dto = new TarefaDTO();
+
+        dto.setId(id);
+        dto.setNome(nome);
+        dto.setDescricao(descricao);
+        dto.setDataCriacao(dataDeCriacao);
+
+        Period periodo = null;
+
+        if (Objects.isNull(dataDeConclusao)) {
+
+            periodo = Period.between(dataDeCriacao, LocalDate.now());
+            
+        } else {
+            periodo = Period.between(dataDeCriacao, dataDeConclusao);
+        }
+
+        dto.setDiasTrabalhados(periodo.getDays()/365);
+        dto.setPrioridade(prioridade);
+        dto.setStatus(status);
+
+        return dto;
+    }
 }

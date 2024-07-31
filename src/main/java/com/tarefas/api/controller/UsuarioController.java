@@ -15,30 +15,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tarefas.api.dto.UsuarioDTO;
 import com.tarefas.api.model.Usuario;
 import com.tarefas.api.service.UsuarioService;
 
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
- 
+
     @Autowired
     private UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity <Usuario> cadastrarUsuarios (@RequestBody Usuario usuario){
+    public ResponseEntity<Usuario> cadastrarUsuarios(@RequestBody Usuario usuario) {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.salvarUsuario(usuario));
     }
-    
+
     @GetMapping
-    public ResponseEntity <List <Usuario>> listarUsuarios(){
+    public ResponseEntity<List<UsuarioDTO>> listarUsuarios() {
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.listarUsuarios());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity <Usuario> consultarUsuario(@PathVariable("id") Long id){
-        
-        Usuario usuario = usuarioService.buscarUsuarioPeloId(id);
+    public ResponseEntity<UsuarioDTO> consultarUsuario(@PathVariable("id") Long id) {
+
+        UsuarioDTO usuario = usuarioService.buscarUsuarioPeloId(id);
 
         if (Objects.isNull(usuario)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -48,9 +49,9 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity <Void> deletarUsuario (@PathVariable("id") Long id){
-        
-        Usuario usuario = usuarioService.buscarUsuarioPeloId(id);
+    public ResponseEntity<Void> deletarUsuario(@PathVariable("id") Long id) {
+
+        UsuarioDTO usuario = usuarioService.buscarUsuarioPeloId(id);
 
         if (Objects.isNull(usuario)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -61,15 +62,15 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity <Usuario> atualizarUsuario (@PathVariable("id") Long id, @RequestBody Usuario dadosUsuario){
+    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable("id") Long id, @RequestBody Usuario dadosUsuario) {
 
-        Usuario usuario = usuarioService.buscarUsuarioPeloId(id);
+        UsuarioDTO usuario = usuarioService.buscarUsuarioPeloId(id);
 
         if (Objects.isNull(usuario)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.atualizarUsuario(id, dadosUsuario));
-        
+
     }
 }
