@@ -72,7 +72,9 @@ public class Tarefas {
             periodo = Period.between(dataDeCriacao, dataDeConclusao);
         }
 
-        dto.setDiasTrabalhados(periodo.getDays()/365);
+        int diasTrabalhados = periodo.getDays() + periodo.getMonths() * 30 + periodo.getYears() * 365;
+
+        dto.setDiasTrabalhados(diasTrabalhados);
         dto.setPrioridade(prioridade);
         dto.setStatus(status);
 

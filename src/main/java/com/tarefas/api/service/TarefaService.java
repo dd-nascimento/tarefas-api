@@ -1,10 +1,9 @@
 package com.tarefas.api.service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.tarefas.api.dto.TarefaDTO;
@@ -21,10 +20,8 @@ public class TarefaService {
         return tarefaRepository.save(tarefas);
     }
 
-    public List <TarefaDTO> listarTarefas (){
-        return tarefaRepository.findAll()
-            .stream().map(Tarefas::toDTO)
-            .collect(Collectors.toList());
+    public Page <TarefaDTO> listarTarefas (Pageable paginacao){
+        return tarefaRepository.findAll(paginacao).map(tarefas -> tarefas.toDTO());
     }
 
     public TarefaDTO buscarTarefaPeloId (Long id){

@@ -3,6 +3,8 @@ package com.tarefas.api.controller;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tarefas.api.dto.ProjetoDTO;
 import com.tarefas.api.model.Projetos;
 import com.tarefas.api.service.ProjetoService;
 
@@ -30,14 +33,14 @@ public class ProjetosController {
     }
 
     @GetMapping
-    public ResponseEntity <List <Projetos>> listarProjetos(){
-        return ResponseEntity.status(HttpStatus.OK).body(projetoService.listarProjetos());
+    public ResponseEntity<Page<ProjetoDTO>> listarProjetos(Pageable paginacao){
+        return ResponseEntity.status(HttpStatus.OK).body(projetoService.listarProjetos(paginacao));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity <Projetos> consultarProjeto(@PathVariable("id") Long id){
+    public ResponseEntity <ProjetoDTO> consultarProjeto(@PathVariable("id") Long id){
 
-        Projetos projeto = projetoService.consultaProjetoPorId(id);
+        ProjetoDTO projeto = projetoService.consultaProjetoPorId(id);
 
         if (Objects.isNull(projeto)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -47,10 +50,15 @@ public class ProjetosController {
 
     }
 
+    @GetMapping("/responsavel/{id}")
+    public ResponseEntity <List <ProjetoDTO>> consultarProjetoPeloREsponsavel(@PathVariable("id") Long id){
+        return ResponseEntity.ok().body(projetoService.consultaProjetoPeloResponsavelId(id));
+    }
+
     @DeleteMapping
     public ResponseEntity <Void> deletarProjeto (@PathVariable ("id") Long id){
 
-        Projetos projeto = projetoService.consultaProjetoPorId(id);
+        ProjetoDTO projeto = projetoService.consultaProjetoPorId(id);
 
         if (Objects.isNull(projeto)) {
             
@@ -64,7 +72,7 @@ public class ProjetosController {
     @PutMapping("/{id}")
     public ResponseEntity <Projetos> atualizarProjetos (@PathVariable("id") Long id, @RequestBody Projetos dadosProjeto){
 
-        Projetos projeto = projetoService.consultaProjetoPorId(id);
+        ProjetoDTO projeto = projetoService.consultaProjetoPorId(id);
 
         if(Objects.isNull(projeto)){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

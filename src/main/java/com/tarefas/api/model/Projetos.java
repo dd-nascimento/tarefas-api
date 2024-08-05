@@ -1,7 +1,11 @@
 package com.tarefas.api.model;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
+import com.tarefas.api.constants.StatusTarefa;
+import com.tarefas.api.dto.ProjetoDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -43,5 +47,37 @@ public class Projetos {
     @ManyToOne
     @JoinColumn(name = "ID_USUARIO_RESP")
     private Usuario responsavel;
+
+    public ProjetoDTO toDTO(){
+
+        ProjetoDTO dto = new ProjetoDTO();
+
+        dto.setId(id);
+        dto.setNome(nome);
+        dto.setDescricao(descricao);
+
+        if (Objects.nonNull(responsavel)) {
+            
+            dto.setNomeResponsavel(responsavel.getNome());
+        }
+
+        List<Tarefas> pendentes = tarefas.stream()
+                                .filter(tarefa -> StatusTarefa.PENDENTE.equals(tarefa.getStatus()))
+                                .collect(Collectors.toList());
+        
+        List<Tarefas> emAndamento = tarefas.stream()
+                                .filter(tarefa -> StatusTarefa.FAZENDO.equals(tarefa.getStatus()))
+                                .collect(Collectors.toList());   
+        
+        List<Tarefas> finalizadas = tarefas.stream()
+                                .filter(tarefa -> StatusTarefa.FINALIZADA.equals(tarefa.getStatus()))
+                                .collect(Collectors.toList());
+
+        dto.setQtdeTarefasFazendo(pendentes.size());
+        dto.setQtdeTarefasPendentes(emAndamento.size());
+        dto.setQtdeTarefasConcluidas(finalizadas.size());
+
+        return dto;
+    }
     
 }

@@ -2,9 +2,9 @@ package com.tarefas.api.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.tarefas.api.dto.UsuarioDTO;
@@ -21,15 +21,10 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    public List<UsuarioDTO> listarUsuarios() {
+    public Page<UsuarioDTO> listarUsuarios(Pageable paginacao) {
 
-        List<Usuario> usuarios = usuarioRepository.findAll();
+        return usuarioRepository.findAll(paginacao).map(usuario -> usuario.toDTO());
 
-
-        /* Função Lambda em JAVA */
-        return usuarios.stream()
-                .map(usuario -> usuario.toDTO())
-                .collect(Collectors.toList());
     }
 
     public UsuarioDTO buscarUsuarioPeloId(Long id) {
@@ -40,6 +35,28 @@ public class UsuarioService {
         }
 
         return null;
+    }
+
+    public UsuarioDTO buscarUsuarioPeloCpf(String cpf) {
+
+        Optional <Usuario> usuarioOpt = usuarioRepository.findByCpf(cpf);
+        if (usuarioOpt.isPresent()) {
+            return usuarioOpt.get().toDTO();
+        }
+
+        return null;
+    }
+
+    public List <UsuarioDTO> filtrarUsuarioPeloNome(String nome){
+        List <Usuario> usuarios = usuarioRepository.findByNomeContains(nome);
+
+        return usuarios.stream().map(Usuario::toDTO).toList();
+    }
+
+    public List <UsuarioDTO> filtrarUsuariosCujoNomeComecamCom(String nome){
+        List <Usuario> usuarios = usuarioRepository.findByNomeLike(nome + "%");
+
+        return usuarios.stream().map(Usuario::toDTO).toList();
     }
 
     public void deletarUsuario(Long id){
