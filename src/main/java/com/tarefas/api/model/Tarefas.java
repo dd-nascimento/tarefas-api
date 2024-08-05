@@ -16,6 +16,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,7 @@ public class Tarefas {
     private long id;
 
     @Column(name = "NOME_TAREFA", nullable = false)
+    @NotNull
     private String nome;
 
     @Column(name = "DESCRICAO_TAREFA")

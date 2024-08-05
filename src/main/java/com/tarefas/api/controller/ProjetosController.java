@@ -20,6 +20,8 @@ import com.tarefas.api.dto.ProjetoDTO;
 import com.tarefas.api.model.Projetos;
 import com.tarefas.api.service.ProjetoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/projetos")
 public class ProjetosController {
@@ -28,7 +30,7 @@ public class ProjetosController {
     private ProjetoService projetoService;
 
     @PostMapping
-    public ResponseEntity <Projetos> cadastrarProjetos(@RequestBody Projetos projetos){
+    public ResponseEntity <Projetos> cadastrarProjetos(@Valid @RequestBody Projetos projetos){
         return ResponseEntity.status(HttpStatus.CREATED).body(projetoService.cadastrarProjetos(projetos));
     }
 

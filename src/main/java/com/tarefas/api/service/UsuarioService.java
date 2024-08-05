@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.tarefas.api.dto.UsuarioDTO;
+import com.tarefas.api.exception.CpfJaCadastradoException;
+import com.tarefas.api.exception.EmailJaCadastradoException;
 import com.tarefas.api.model.Usuario;
 import com.tarefas.api.repository.UsuarioRepository;
 
@@ -18,6 +20,21 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     public Usuario salvarUsuario(Usuario usuario) {
+
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByCpf(usuario.getCpf());
+
+
+        if (usuarioOpt.isPresent()) {
+            throw new CpfJaCadastradoException("Já existe usuário com o CPF informado.");
+        }
+        
+        usuarioOpt = usuarioRepository.findByEmail(usuario.getEmail());
+
+        if (usuarioOpt.isPresent()) {
+            
+            throw new EmailJaCadastradoException("Este e-mail já está cadastrado para um usuario!");
+        }
+
         return usuarioRepository.save(usuario);
     }
 

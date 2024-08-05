@@ -24,6 +24,8 @@ import com.tarefas.api.dto.UsuarioDTO;
 import com.tarefas.api.model.Usuario;
 import com.tarefas.api.service.UsuarioService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
@@ -32,7 +34,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<Usuario> cadastrarUsuarios(@RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> cadastrarUsuarios(@Valid @RequestBody Usuario usuario) {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.salvarUsuario(usuario));
     }
 
@@ -85,7 +87,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable("id") Long id, @RequestBody Usuario dadosUsuario) {
+    public ResponseEntity<Usuario> atualizarUsuario(@Valid @PathVariable("id") Long id, @RequestBody Usuario dadosUsuario) {
 
         UsuarioDTO usuario = usuarioService.buscarUsuarioPeloId(id);
 

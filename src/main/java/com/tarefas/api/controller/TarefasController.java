@@ -18,6 +18,8 @@ import com.tarefas.api.dto.TarefaDTO;
 import com.tarefas.api.model.Tarefas;
 import com.tarefas.api.service.TarefaService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/tarefas")
 public class TarefasController {
@@ -26,7 +28,7 @@ public class TarefasController {
     private TarefaService tarefaService;
 
     @PostMapping
-    public ResponseEntity <Tarefas> cadastrarNovaTarefa(@RequestBody Tarefas tarefas){
+    public ResponseEntity <Tarefas> cadastrarNovaTarefa(@Valid @RequestBody Tarefas tarefas){
         return ResponseEntity.status(HttpStatus.CREATED).body(tarefaService.cadastrarNovaTarefa(tarefas));
     }
 

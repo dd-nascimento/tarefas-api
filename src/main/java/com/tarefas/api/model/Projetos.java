@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,7 @@ public class Projetos {
     private long id;
 
     @Column(name = "NOME_PROJETO", nullable = false)
+    @NotNull
     private String nome;
 
     @Column(name = "DESCRICAO_PROJETO")

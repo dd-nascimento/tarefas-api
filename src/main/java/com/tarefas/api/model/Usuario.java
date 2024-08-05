@@ -14,6 +14,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,9 +34,11 @@ public class Usuario {
     @Column(name = "ID_USUARIO")
     private Long id;
 
+    @NotNull(message = "Campo nome é Obrigatório!") /* A aplicação não irá receber o objeto JSON sem o nome */
     @Column(name = "NOME_USUARIO", nullable = false)
     private String nome;
 
+    @NotNull(message = "Obrigatório informar o CPF!")
     @Column(name = "CPF_USUARIO", nullable = false, unique = true)
     private String cpf;
 
